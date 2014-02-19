@@ -1,0 +1,24 @@
+{
+  "name": "scrat-command-server",
+  "version": "0.0.1",
+  "description": "scrat server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fouber/scrat-command-server.git"
+  },
+  "keywords": [
+    "fis",
+    "scrat",
+    "server"
+  ],
+  "author": "fouber <fouber.NET@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fouber/scrat-command-server/issues"
+  },
+  "homepage": "https://github.com/fouber/scrat-command-server"
+}
