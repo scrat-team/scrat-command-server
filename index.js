@@ -87,34 +87,6 @@ exports.register = function(commander) {
                 process.stderr.write('launch server failed\n');
             }
         });
-
-//        var args = [
-//            __dirname + '/master.js',
-//            root
-//        ];
-//        var ready = false;
-//        var server = spawn(process.execPath, args, { cwd : __dirname, detached: true });
-//        server.stderr.on('data', function(chunk){
-//            if(ready) return;
-//            process.stderr.write(chunk);
-//            chunk = chunk.toString('utf8');
-//            if(/\b(launch server failed|server is running)\b/.test(chunk)){
-//                ready = true;
-//                setTimeout(function(){ process.exit(); }, 200);
-//            } else if(chunk.indexOf('Exception') > 0) {
-//                fis.log.error(chunk);
-//            }
-//        });
-//        server.stdout.pipe(process.stdout);
-//        server.on('error', function(err){
-//            try {
-//                process.kill(server.pid, 'SIGINT');
-//                process.kill(server.pid, 'SIGKILL');
-//            } catch(e){}
-//            fis.log.error(err);
-//        });
-//        server.unref();
-//        fis.util.write(getPidFile(), server.pid);
     }
 
     function stop(callback){
