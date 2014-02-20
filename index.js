@@ -62,7 +62,8 @@ exports.register = function(commander) {
         var child_process = spawn(process.execPath, [ file ], { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
-        process.stderr.write('server is running\n');
+        process.stderr.write(' ➜ server is running\n');
+        fis.util.write(getPidFile(), child_process.pid);
     }
 
     function start(){
