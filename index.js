@@ -67,7 +67,7 @@ exports.register = function(commander) {
     }
 
     function start(){
-        var npm = spawn('npm', [ 'install' ], { cwd : root });
+        var npm = child_process.exec('npm install', { cwd : root });
         npm.stderr.pipe(process.stderr);
         npm.stdout.pipe(process.stdout);
         npm.on('exit', function(code){
