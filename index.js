@@ -66,28 +66,42 @@ exports.register = function(commander) {
         fis.util.write(getPidFile(), child_process.pid);
     }
 
-    function start(){
-        var npm = child_process.exec('npm install', { cwd : root });
-        npm.stderr.pipe(process.stderr);
-        npm.stdout.pipe(process.stdout);
-        npm.on('exit', function(code){
-            if(code === 0){
-                if(fis.util.exists(root + '/Procfile')){
-                    var content = fis.util.read(root + '/Procfile', true);
-                    var reg = /^web\s*:\s*.*?node\s+([\S]+)/im;
-                    var match = content.match(reg);
-                    if(match && match[1]){
-                        lanuch(match[1]);
-                    } else {
-                        lanuch('index.js');
-                    }
-                } else if(fis.util.exists(root + '/index.js')){
-                    lanuch('index.js');
-                }
+    function startServer(){
+        if(fis.util.exists(root + '/Procfile')){
+            var content = fis.util.read(root + '/Procfile', true);
+            var reg = /^web\s*:\s*.*?node\s+([\S]+)/im;
+            var match = content.match(reg);
+            if(match && match[1]){
+                lanuch(match[1]);
             } else {
-                process.stderr.write('launch server failed\n');
+                lanuch('index.js');
             }
-        });
+        } else if(fis.util.exists(root + '/index.js')){
+            lanuch('index.js');
+        }
+    }
+
+    function start(){
+        var cwd;
+        if(fis.util.exists(root + '/server/package.json')){
+            cwd = root + '/server';
+        } else if(fis.util.exists(root + '/package.json')){
+            cwd = root + '/server';
+        }
+        if(cwd){
+            var npm = child_process.exec('npm install', { cwd : cwd });
+            npm.stderr.pipe(process.stderr);
+            npm.stdout.pipe(process.stdout);
+            npm.on('exit', function(code){
+                if(code === 0){
+                    startServer();
+                } else {
+                    process.stderr.write('launch server failed\n');
+                }
+            });
+        } else {
+            startServer();
+        }
     }
 
     function stop(callback){
