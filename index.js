@@ -86,7 +86,7 @@ exports.register = function(commander) {
         if(fis.util.exists(root + '/server/package.json')){
             cwd = root + '/server';
         } else if(fis.util.exists(root + '/package.json')){
-            cwd = root + '/server';
+            cwd = root;
         }
         if(cwd){
             var npm = child_process.exec('npm install', { cwd : cwd });
