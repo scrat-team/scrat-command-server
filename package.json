@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fouber/scrat-command-server.git"
+    "url": "https://github.com/scrat-team/scrat-command-server.git"
   },
   "keywords": [
     "fis",
@@ -18,7 +18,7 @@
   "author": "fouber <fouber.NET@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fouber/scrat-command-server/issues"
+    "url": "https://github.com/scrat-team/scrat-command-server/issues"
   },
   "homepage": "https://github.com/fouber/scrat-command-server"
 }
