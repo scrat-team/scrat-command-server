@@ -74,10 +74,12 @@ exports.register = function(commander) {
             if(match && match[1]){
                 lanuch(match[1]);
             } else {
-                lanuch('index.js');
+                lanuch('.');
             }
         } else if(fis.util.exists(root + '/index.js')){
             lanuch('index.js');
+        } else {
+            lanuch('.');
         }
     }
 
