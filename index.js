@@ -177,7 +177,8 @@ exports.register = function(commander) {
                     process.stdout.write(' δ '.bold.yellow);
                     var now = Date.now();
                     var include = fis.config.get('server.clean.include', null);
-                    var exclude = fis.config.get('server.clean.exclude', root + '/node_modules/');
+                    var reg = new RegExp('^' + _.escapeReg(root + '/node_modules/'), 'i');
+                    var exclude = fis.config.get('server.clean.exclude', reg);
                     fis.util.del(root, include, exclude);
                     process.stdout.write((Date.now() - now + 'ms').green.bold);
                     process.stdout.write('\n');
