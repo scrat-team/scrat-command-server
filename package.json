@@ -1,6 +1,6 @@
 {
   "name": "scrat-command-server",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "scrat server",
   "main": "index.js",
   "scripts": {
