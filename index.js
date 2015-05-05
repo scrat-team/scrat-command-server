@@ -59,7 +59,7 @@ exports.register = function(commander) {
     }
 
     function lanuch(file){
-        var child_process = spawn(process.execPath, [ file ], { cwd : root });
+        var child_process = spawn(process.execPath, arguments, { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
         process.stderr.write(' ➜ server is running\n');
@@ -69,17 +69,17 @@ exports.register = function(commander) {
     function startServer(){
         if(fis.util.exists(root + '/Procfile')){
             var content = fis.util.read(root + '/Procfile', true);
-            var reg = /^web\s*:\s*.*?node\s+([\S]+)/im;
+            var reg = /^web\s*:\s*.*?node\s+(.+)/im;
             var match = content.match(reg);
             if(match && match[1]){
-                lanuch(match[1]);
+                lanuch(match[1].split(/\s+/g));
             } else {
-                lanuch('.');
+                lanuch('--harmony', '.');
             }
         } else if(fis.util.exists(root + '/index.js')){
-            lanuch('index.js');
+            lanuch('--harmony', 'index.js');
         } else {
-            lanuch('.');
+            lanuch('--harmony', '.');
         }
     }
 
