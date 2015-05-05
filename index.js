@@ -59,7 +59,7 @@ exports.register = function(commander) {
     }
 
     function lanuch(file){
-        var child_process = spawn(process.execPath, arguments, { cwd : root });
+        var child_process = spawn(process.execPath, [].slice.call(arguments), { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
         process.stderr.write(' ➜ server is running\n');
