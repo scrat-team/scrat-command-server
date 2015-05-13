@@ -72,7 +72,7 @@ exports.register = function(commander) {
             var reg = /^web\s*:\s*.*?node\s+(.+)/im;
             var match = content.match(reg);
             if(match && match[1]){
-                lanuch(match[1].split(/\s+/g));
+                lanuch.apply(null, match[1].split(/\s+/g));
             } else {
                 lanuch('--harmony', '.');
             }
