@@ -59,7 +59,8 @@ exports.register = function(commander) {
     }
 
     function lanuch(file){
-        var child_process = spawn(process.execPath, [].slice.call(arguments), { cwd : root });
+        var execPath = require('path').join(__dirname, 'node_modules', '.bin', 'node-dev');
+        var child_process = spawn(execPath, [].slice.call(arguments), { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
         process.stderr.write(' ➜ server is running\n');

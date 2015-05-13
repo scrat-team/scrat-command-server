@@ -1,6 +1,6 @@
 {
   "name": "scrat-command-server",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "scrat server",
   "main": "index.js",
   "scripts": {
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/scrat-team/scrat-command-server/issues"
   },
-  "homepage": "https://github.com/fouber/scrat-command-server"
+  "homepage": "https://github.com/fouber/scrat-command-server",
+  "dependencies": {
+    "node-dev": "^2.6.1"
+  }
 }
