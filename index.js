@@ -175,6 +175,9 @@ exports.register = function(commander) {
                 case 'open':
                     open(root);
                     break;
+                case 'path':
+                    console.log(root);
+                    break;
                 case 'clean':
                     process.stdout.write(' δ '.bold.yellow);
                     var now = Date.now();
