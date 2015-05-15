@@ -59,7 +59,8 @@ exports.register = function(commander) {
     }
 
     function lanuch(file){
-        var execPath = require('path').join(__dirname, 'node_modules', '.bin', 'node-dev');
+        var cmd = 'node-dev' + (fis.util.isWin() ? '.cmd' : '');
+        var execPath = require('path').join(__dirname, 'node_modules', '.bin', cmd);
         var child_process = spawn(execPath, [].slice.call(arguments), { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
@@ -169,9 +170,9 @@ exports.register = function(commander) {
                 case 'start':
                     stop(start);
                     break;
-//                case 'stop':
-//                    stop(function(){});
-//                    break;
+                //case 'stop':
+                //    stop(function(){});
+                //    break;
                 case 'open':
                     open(root);
                     break;
