@@ -58,13 +58,20 @@ exports.register = function(commander) {
         return fis.project.getTempPath('server/pid');
     }
 
-    function lanuch(file){
-        var cmd = 'node-dev' + (fis.util.isWin() ? '.cmd' : '');
-        var execPath = require('path').join(__dirname, 'node_modules', '.bin', cmd);
-        var child_process = spawn(execPath, [].slice.call(arguments), { cwd : root });
+    var live = false;
+    function lanuch(){
+        var args = [].slice.call(arguments);
+        var execPath;
+        if(live){
+            var cmd = 'node-dev' + (fis.util.isWin() ? '.cmd' : '');
+            execPath = require('path').join(__dirname, 'node_modules', '.bin', cmd);
+        } else {
+            execPath = process.execPath;
+        }
+        var child_process = spawn(execPath, args, { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
-        process.stderr.write(' ➜ server is running\n');
+        process.stderr.write(' ➜ ' + (live ? 'livereload ' : '') + 'server is running\n');
         fis.util.write(getPidFile(), child_process.pid);
     }
 
@@ -152,6 +159,7 @@ exports.register = function(commander) {
 
     commander
         .option('-a, --all', 'clean all server files', Boolean)
+        .option('-L, --live', 'livereload server', Boolean)
         .action(function(){
             var args = Array.prototype.slice.call(arguments);
             var options = args.pop();
@@ -168,6 +176,7 @@ exports.register = function(commander) {
 
             switch (cmd) {
                 case 'start':
+                    live = options.live;
                     stop(start);
                     break;
                 //case 'stop':
