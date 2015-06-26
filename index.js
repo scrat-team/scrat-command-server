@@ -13,6 +13,10 @@ exports.usage = '<command> [options]';
 exports.desc = 'launch nodejs server';
 exports.register = function(commander) {
 
+    var live = false;
+    var debug = undefined;
+    var debugBrk = undefined;
+
     function touch(dir){
         if(fis.util.exists(dir)){
             if(!fis.util.isDir(dir)){
@@ -58,7 +62,7 @@ exports.register = function(commander) {
         return fis.project.getTempPath('server/pid');
     }
 
-    var live = false;
+
     function lanuch(){
         var args = [].slice.call(arguments);
         var execPath;
@@ -67,6 +71,11 @@ exports.register = function(commander) {
             execPath = require('path').join(__dirname, 'node_modules', '.bin', cmd);
         } else {
             execPath = process.execPath;
+        }
+        if(debugBrk){
+            args.unshift('--debug-brk=' + (typeof debugBrk === "number" ? debugBrk : 5858));
+        }else if(debug){
+            args.unshift('--debug=' + (typeof debug === "number" ? debug : 5858));
         }
         var child_process = spawn(execPath, args, { cwd : root });
         child_process.stderr.pipe(process.stderr);
@@ -160,6 +169,8 @@ exports.register = function(commander) {
     commander
         .option('-a, --all', 'clean all server files', Boolean)
         .option('-L, --live', 'livereload server', Boolean)
+        .option('--debug [debugPort]', 'enable debug, default port is 5858', Number)
+        .option('--debug-brk [debugPort]', 'enable debug-brk, default port is 5858', Number)
         .action(function(){
             var args = Array.prototype.slice.call(arguments);
             var options = args.pop();
@@ -177,6 +188,8 @@ exports.register = function(commander) {
             switch (cmd) {
                 case 'start':
                     live = options.live;
+                    debug = options.debug;
+                    debugBrk = options.debugBrk;
                     stop(start);
                     break;
                 //case 'stop':
