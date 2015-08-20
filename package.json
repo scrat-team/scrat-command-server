@@ -1,6 +1,6 @@
 {
   "name": "scrat-command-server",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "scrat server",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/fouber/scrat-command-server",
   "dependencies": {
-    "node-dev": "^2.6.1"
+    "node-dev": "2.6.2"
   }
 }
