@@ -112,16 +112,24 @@ exports.register = function(commander) {
             cwd = root;
         }
         if(cwd){
-            var npm = child_process.exec(hasbin.sync('tnpm') ? 'tnpm install' : 'npm install', { cwd : cwd });
-            npm.stderr.pipe(process.stderr);
-            npm.stdout.pipe(process.stdout);
-            npm.on('exit', function(code){
-                if(code === 0){
-                    startServer();
-                } else {
-                    process.stderr.write('launch server failed\n');
-                }
+            var pkg = require(cwd + '/package.json');
+            var privateDeps = [].concat(Object.keys(pkg.dependencies), Object.keys(pkg.devDependencies)).filter(function(key){
+                return key.indexOf('@ali') !== -1;
             });
+            if(privateDeps.length > 0 && !hasbin.sync('tnpm')){
+                fis.log.error('has private deps(' + privateDeps.join(',') + '), but not found tnpm !\nplz try: npm install tnpm -g --registry=http://registry.npm.alibaba-inc.com\nsee also http://web.npm.alibaba-inc.com/');
+            }else{
+                var npm = child_process.exec(hasbin.sync('tnpm') ? 'tnpm install' : 'npm install', { cwd : cwd });
+                npm.stderr.pipe(process.stderr);
+                npm.stdout.pipe(process.stdout);
+                npm.on('exit', function(code){
+                    if(code === 0){
+                        startServer();
+                    } else {
+                        process.stderr.write('launch server failed\n');
+                    }
+                });
+            }
         } else {
             startServer();
         }
