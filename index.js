@@ -7,6 +7,7 @@
 
 var child_process = require('child_process');
 var spawn = child_process.spawn;
+var hasbin = require('hasbin');
 
 exports.name = 'server';
 exports.usage = '<command> [options]';
@@ -16,6 +17,7 @@ exports.register = function(commander) {
     var live = false;
     var debug = undefined;
     var debugBrk = undefined;
+    var harmony = false;
 
     function touch(dir){
         if(fis.util.exists(dir)){
@@ -77,6 +79,9 @@ exports.register = function(commander) {
         }else if(debug){
             args.unshift('--debug=' + (typeof debug === "number" ? debug : 5858));
         }
+        if(harmony){
+            args.unshift('--harmony');
+        }
         var child_process = spawn(execPath, args, { cwd : root });
         child_process.stderr.pipe(process.stderr);
         child_process.stdout.pipe(process.stdout);
@@ -85,20 +90,18 @@ exports.register = function(commander) {
     }
 
     function startServer(){
+        var execArgs = [];
         if(fis.util.exists(root + '/Procfile')){
             var content = fis.util.read(root + '/Procfile', true);
             var reg = /^web\s*:\s*.*?node\s+(.+)/im;
             var match = content.match(reg);
-            if(match && match[1]){
-                lanuch.apply(null, match[1].split(/\s+/g));
-            } else {
-                lanuch('--harmony', '.');
-            }
+            execArgs = match && match[1] ? match[1].split(/\s+/g) : ['.'];
         } else if(fis.util.exists(root + '/index.js')){
-            lanuch('--harmony', 'index.js');
+            execArgs = ['index.js'];
         } else {
-            lanuch('--harmony', '.');
+            execArgs = ['.'];
         }
+        lanuch.apply(null, execArgs);
     }
 
     function start(){
@@ -109,7 +112,7 @@ exports.register = function(commander) {
             cwd = root;
         }
         if(cwd){
-            var npm = child_process.exec('npm install', { cwd : cwd });
+            var npm = child_process.exec(hasbin.sync('tnpm') ? 'tnpm install' : 'npm install', { cwd : cwd });
             npm.stderr.pipe(process.stderr);
             npm.stdout.pipe(process.stdout);
             npm.on('exit', function(code){
@@ -171,6 +174,7 @@ exports.register = function(commander) {
         .option('-L, --live', 'livereload server', Boolean)
         .option('--debug [debugPort]', 'enable debug, default port is 5858', Number)
         .option('--debug-brk [debugPort]', 'enable debug-brk, default port is 5858', Number)
+        .option('--harmony', 'enable harmony feature', Boolean)
         .action(function(){
             var args = Array.prototype.slice.call(arguments);
             var options = args.pop();
@@ -190,6 +194,7 @@ exports.register = function(commander) {
                     live = options.live;
                     debug = options.debug;
                     debugBrk = options.debugBrk;
+                    harmony = options.harmony;
                     stop(start);
                     break;
                 //case 'stop':
