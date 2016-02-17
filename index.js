@@ -113,7 +113,7 @@ exports.register = function(commander) {
         }
         if(cwd){
             var pkg = require(cwd + '/package.json');
-            var privateDeps = [].concat(Object.keys(pkg.dependencies), Object.keys(pkg.devDependencies)).filter(function(key){
+            var privateDeps = [].concat(Object.keys(pkg.dependencies || {}), Object.keys(pkg.devDependencies || {})).filter(function(key){
                 return key.indexOf('@ali') !== -1;
             });
             if(privateDeps.length > 0 && !hasbin.sync('tnpm')){
