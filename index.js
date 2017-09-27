@@ -8,6 +8,7 @@
 var child_process = require('child_process');
 var spawn = child_process.spawn;
 var hasbin = require('hasbin');
+var nodePath = require("path");
 
 exports.name = 'server';
 exports.usage = '<command> [options]';
@@ -70,7 +71,17 @@ exports.register = function(commander) {
         var execPath;
         if(live){
             var cmd = 'node-dev' + (fis.util.isWin() ? '.cmd' : '');
-            execPath = require('path').join(__dirname, 'node_modules', '.bin', cmd);
+            // npm v3 后，node_modules 机制发生了变化，不再当前目录下创建 node_modules 目录
+            // @see https://docs.npmjs.com/how-npm-works/npm3
+            // 针对 v2 的写法会在高版本的 node 或升级到 npm v3 后报错
+            // 检测下当前目录下 node_modules 文件夹的状态做对应处理
+            try {
+                require("fs").accessSync("./node_modules");
+                execPath = nodePath.join(__dirname, "node_modules", ".bin", cmd);
+            } catch(e) {
+                execPath = nodePath.join(__dirname, "..", ".bin", cmd);
+            }
+
         } else {
             execPath = process.execPath;
         }
